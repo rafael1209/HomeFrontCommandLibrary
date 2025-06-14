@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeFrontCommandLibrary.IntegrationTests", "src\HomeFrontCommandLibrary.IntegrationTests\HomeFrontCommandLibrary.IntegrationTests.csproj", "{B066A7F5-EAF7-4BDB-9D5E-87CE7E40B0FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeFrontCommandLibrary", "src\HomeFrontCommandLibrary\HomeFrontCommandLibrary.csproj", "{78B0E81F-8030-44CC-A159-3D544632378B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B066A7F5-EAF7-4BDB-9D5E-87CE7E40B0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B066A7F5-EAF7-4BDB-9D5E-87CE7E40B0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B066A7F5-EAF7-4BDB-9D5E-87CE7E40B0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B066A7F5-EAF7-4BDB-9D5E-87CE7E40B0FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78B0E81F-8030-44CC-A159-3D544632378B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78B0E81F-8030-44CC-A159-3D544632378B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78B0E81F-8030-44CC-A159-3D544632378B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78B0E81F-8030-44CC-A159-3D544632378B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {454134B3-1CBB-49CD-9DAF-213803C12B89}
+	EndGlobalSection
+EndGlobal
