@@ -17,7 +17,7 @@ public class HomeFrontCommand(Language language = Language.Hebrew) : IHomeFrontC
     {
         var activeAlerts = await _alertService.GetCurrentAlert();
 
-        if (activeAlerts == null)
+        if (activeAlerts?.Title == null)
         {
             return new Alert
             {
@@ -26,6 +26,7 @@ public class HomeFrontCommand(Language language = Language.Hebrew) : IHomeFrontC
                 AlertDate = DateTime.Now,
             };
         }
+
         var cities = new List<City>();
         foreach (var city in activeAlerts.Data)
         {
