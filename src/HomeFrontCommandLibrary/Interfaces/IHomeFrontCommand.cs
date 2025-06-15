@@ -1,6 +1,9 @@
-﻿namespace HomeFrontCommandLibrary.Interfaces;
+﻿using HomeFrontCommandLibrary.Models;
+
+namespace HomeFrontCommandLibrary.Interfaces;
 
 public interface IHomeFrontCommand
 {
-    Task GetActiveAlert();
+    Task<Alert> GetActiveAlert();
+    Task<List<Alert>> GetAlertsHistory();
 }

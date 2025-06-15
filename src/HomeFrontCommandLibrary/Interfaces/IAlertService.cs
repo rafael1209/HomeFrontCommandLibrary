@@ -5,5 +5,5 @@ namespace HomeFrontCommandLibrary.Interfaces;
 public interface IAlertService
 {
     Task<CurrentAlertApiResponse?> GetCurrentAlert();
-    Task<List<AlertHistory>> GetAlertsHistory();
+    Task<List<AlertHistoryApiResponse>> GetAlertsHistory();
 }

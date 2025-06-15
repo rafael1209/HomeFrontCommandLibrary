@@ -5,12 +5,12 @@ namespace HomeFrontCommandLibrary.IntegrationTests;
 
 public class Test
 {
-    public readonly IAlertService AlertService = new AlertService();
+    public readonly IHomeFrontCommand HomeFrontCommand = new HomeFrontCommand();
 
     [Fact]
     public async void TestHistory()
     {
-        var alertsHistory = await AlertService.GetAlertsHistory();
+        var alertsHistory = await HomeFrontCommand.GetAlertsHistory();
 
         Assert.NotNull(alertsHistory);
     }
@@ -18,8 +18,8 @@ public class Test
     [Fact]
     public async void TestGetCurrent()
     {
-        var alert = await AlertService.GetCurrentAlert();
+        var activeAlert = await HomeFrontCommand.GetActiveAlert();
 
-        Assert.NotNull(alert);
+        Assert.NotNull(activeAlert);
     }
 }

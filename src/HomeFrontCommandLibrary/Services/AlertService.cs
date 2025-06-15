@@ -22,7 +22,7 @@ public class AlertService : IAlertService
         return currentAlert;
     }
 
-    public async Task<List<AlertHistory>> GetAlertsHistory()
+    public async Task<List<AlertHistoryApiResponse>> GetAlertsHistory()
     {
         var response = await _httpClient.GetAsync("https://www.oref.org.il/warningMessages/alert/History/AlertsHistory.json");
 
@@ -31,7 +31,7 @@ public class AlertService : IAlertService
 
         var content = await response.Content.ReadAsStringAsync();
 
-        var alertsHistory = JsonConvert.DeserializeObject<List<AlertHistory>>(content);
+        var alertsHistory = JsonConvert.DeserializeObject<List<AlertHistoryApiResponse>>(content);
 
         if (alertsHistory == null)
             throw new JsonException("Failed to deserialize alerts history response");
