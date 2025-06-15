@@ -9,6 +9,11 @@
     <Title>Pikud Haoref Alerts</Title>
     <Description>C# library for retrieving real-time alerts and sirens issued by Israel's Home Front Command, including alert type, affected cities, and instructions.</Description>
     <PackageProjectUrl>https://github.com/rafael1209/HomeFrontCommandLibrary</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>Pakar.png</PackageIcon>
+    <RepositoryUrl>https://github.com/rafael1209/HomeFrontCommandLibrary</RepositoryUrl>
+    <PackageTags>IDF HomeFrontCommand Israel SirenAlerts RealTimeAlerts SirenAPI CSharpClient EmergencyAlerts IDFAlerts IsraelDefenseForces WarningSystem ThreatAlerts</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +23,21 @@
 
   <ItemGroup>
     <Folder Include="Enums\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\Pakar.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
