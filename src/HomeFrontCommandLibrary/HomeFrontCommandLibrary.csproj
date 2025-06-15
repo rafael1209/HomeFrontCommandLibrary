@@ -4,6 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>HomeFrontCommand</PackageId>
+    <Title>Pikud Haoref Alerts</Title>
+    <Description>C# library for retrieving real-time alerts and sirens issued by Israel's Home Front Command, including alert type, affected cities, and instructions.</Description>
+    <PackageProjectUrl>https://github.com/rafael1209/HomeFrontCommandLibrary</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
