@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace HomeFrontCommandLibrary.Services;
 
-public class AlertService : IAlertService
+internal class AlertService : IAlertService
 {
     private readonly HttpClient _httpClient = new();
 

@@ -2,7 +2,7 @@
 
 namespace HomeFrontCommandLibrary.Models.Responses;
 
-public class AlertHistoryApiResponse
+internal class AlertHistoryApiResponse
 {
     [JsonPropertyName("alertDate")]
     public DateTime AlertDate { get; set; }

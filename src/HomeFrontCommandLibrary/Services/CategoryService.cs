@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace HomeFrontCommandLibrary.Services;
 
-public class CategoryService(IMemoryCache cache, Language language = Language.Hebrew) : ICategoryService
+internal class CategoryService(IMemoryCache cache, Language language = Language.Hebrew) : ICategoryService
 {
     private readonly HttpClient _httpClient = new();
 
@@ -37,7 +37,7 @@ public class CategoryService(IMemoryCache cache, Language language = Language.He
                 Language.Russian => translation.Rus,
                 Language.Arabic => translation.Arb,
                 Language.English => translation.Eng,
-                _ => translation.Eng
+                _ => translation.Heb
             }
         };
 

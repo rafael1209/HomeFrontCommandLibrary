@@ -3,7 +3,7 @@ using HomeFrontCommandLibrary.Models.Responses;
 
 namespace HomeFrontCommandLibrary.Interfaces;
 
-public interface ICityService
+internal interface ICityService
 {
     Task<City> GetCityByName(string cityName);
     Task<List<DistrictsApiResponse>> GetCities();

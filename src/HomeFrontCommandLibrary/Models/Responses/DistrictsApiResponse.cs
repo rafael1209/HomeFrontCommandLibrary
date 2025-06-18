@@ -2,7 +2,7 @@
 
 namespace HomeFrontCommandLibrary.Models.Responses;
 
-public class DistrictsApiResponse
+internal class DistrictsApiResponse
 {
     [JsonProperty("areaid")]
     public int AreaId { get; set; }

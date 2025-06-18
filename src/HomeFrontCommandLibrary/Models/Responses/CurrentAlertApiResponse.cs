@@ -2,7 +2,7 @@
 
 namespace HomeFrontCommandLibrary.Models.Responses;
 
-public class CurrentAlertApiResponse
+internal class CurrentAlertApiResponse
 {
     [JsonProperty("id")]
     public string? Id { get; set; }

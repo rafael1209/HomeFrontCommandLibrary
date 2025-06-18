@@ -2,7 +2,7 @@
 
 namespace HomeFrontCommandLibrary.Interfaces;
 
-public interface IAlertService
+internal interface IAlertService
 {
     Task<CurrentAlertApiResponse?> GetCurrentAlert();
     Task<List<AlertHistoryApiResponse>> GetAlertsHistory();

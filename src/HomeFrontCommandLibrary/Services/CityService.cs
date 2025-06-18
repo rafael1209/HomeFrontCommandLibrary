@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace HomeFrontCommandLibrary.Services;
 
-public class CityService(IMemoryCache memoryCache, Language language = Language.Hebrew) : ICityService
+internal class CityService(IMemoryCache memoryCache, Language language = Language.Hebrew) : ICityService
 {
     private readonly HttpClient _httpClient = new();
 
@@ -15,8 +15,18 @@ public class CityService(IMemoryCache memoryCache, Language language = Language.
     {
         var cites = await GetCities();
 
-        var city = cites.FirstOrDefault(c => c.LabelHebrew.Equals(cityName, StringComparison.OrdinalIgnoreCase)) ??
-                   throw new Exception($"City '{cityName}' not found.");
+        var city = cites.FirstOrDefault(c => c.LabelHebrew.Equals(cityName, StringComparison.OrdinalIgnoreCase));
+
+        if (city == null)
+        {
+            return new City
+            {
+                AreaId = -1,
+                Name = cityName,
+                AreaName = string.Empty,
+                ProtectionTime = -1
+            };
+        }
 
         var cityData = new City
         {
@@ -25,7 +35,7 @@ public class CityService(IMemoryCache memoryCache, Language language = Language.
             AreaName = city.AreaName,
             ProtectionTime = city.MigunTime
         };
-
+        
         return cityData;
     }
 

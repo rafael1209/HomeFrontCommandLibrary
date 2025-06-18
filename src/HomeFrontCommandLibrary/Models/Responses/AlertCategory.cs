@@ -2,7 +2,7 @@
 
 namespace HomeFrontCommandLibrary.Models.Responses;
 
-public class AlertCategory
+internal class AlertCategory
 {
     [JsonProperty("id")]
     public int Id { get; set; }

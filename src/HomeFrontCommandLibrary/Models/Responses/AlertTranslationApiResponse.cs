@@ -2,7 +2,7 @@
 
 namespace HomeFrontCommandLibrary.Models.Responses;
 
-public class AlertTranslationApiResponse
+internal class AlertTranslationApiResponse
 {
     [JsonProperty("heb")]
     public string Heb { get; set; } = string.Empty;
