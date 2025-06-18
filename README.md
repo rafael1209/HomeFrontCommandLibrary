@@ -7,10 +7,10 @@ Provides access to **real-time rocket/siren alerts** and **alert history**, with
 
 ## 📦 Installation
 
-Via NuGet (if published):
+Via NuGet:
 
 ```bash
-dotnet add package HomeFrontCommandLibrary
+dotnet add package HomeFrontCommand
 ```
 
 Or clone this repository and reference the project directly.
