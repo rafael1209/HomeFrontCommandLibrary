@@ -8,7 +8,7 @@ public class Test
     public readonly IHomeFrontCommand HomeFrontCommand = new HomeFrontCommand(Language.Russian);
 
     [Fact]
-    public async void TestHistory()
+    public async Task TestHistory()
     {
         var alertsHistory = await HomeFrontCommand.GetAlertsHistory();
 
@@ -16,7 +16,7 @@ public class Test
     }
 
     [Fact]
-    public async void TestGetCurrent()
+    public async Task TestGetCurrent()
     {
         var activeAlert = await HomeFrontCommand.GetActiveAlert();
 
