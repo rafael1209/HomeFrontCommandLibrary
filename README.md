@@ -21,7 +21,7 @@ Or clone this repository and reference the project directly.
 
 * Get the **current active alert**
 * Fetch **historical alert data**
-* Automatically translated alert categories (Hebrew, Russian, English, Arabic)
+* Automatically translated alert categories and cities names (Hebrew, Russian, English, Arabic)
 * Resolve city names by alert
 * In-memory **caching support** for optimal performance
 
