@@ -1,10 +1,11 @@
+using HomeFrontCommandLibrary.Enums;
 using HomeFrontCommandLibrary.Interfaces;
 
 namespace HomeFrontCommandLibrary.IntegrationTests;
 
 public class Test
 {
-    public readonly IHomeFrontCommand HomeFrontCommand = new HomeFrontCommand();
+    public readonly IHomeFrontCommand HomeFrontCommand = new HomeFrontCommand(Language.Russian);
 
     [Fact]
     public async void TestHistory()

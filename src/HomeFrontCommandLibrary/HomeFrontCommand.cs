@@ -2,13 +2,12 @@
 using HomeFrontCommandLibrary.Interfaces;
 using HomeFrontCommandLibrary.Models;
 using HomeFrontCommandLibrary.Services;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace HomeFrontCommandLibrary;
 
 public class HomeFrontCommand(Language language = Language.Hebrew) : IHomeFrontCommand
 {
-    private static readonly IMemoryCache MemoryCache = new MemoryCache(new MemoryCacheOptions());
+    private static readonly ICacheService MemoryCache = new CacheService();
     private readonly IAlertService _alertService = new AlertService();
     private readonly ICategoryService _categoryService = new CategoryService(MemoryCache, language);
     private readonly ICityService _cityService = new CityService(MemoryCache, language);
@@ -21,43 +20,39 @@ public class HomeFrontCommand(Language language = Language.Hebrew) : IHomeFrontC
         {
             return new Alert
             {
-                Category = new Category(),
-                Cities = [],
+                Category = null,
+                Cities = null,
                 AlertDate = DateTime.Now,
             };
         }
 
-        var cities = new List<City>();
-        foreach (var city in activeAlerts.Data)
-        {
-            cities.Add(await _cityService.GetCityByName(city));
-        }
+        var cities = await Task.WhenAll(
+            activeAlerts.Data.Select(name => _cityService.GetCityByName(name))
+        );
 
-        var alerts = new Alert
+        var alert = new Alert
         {
             Category = await _categoryService.GetCategoryByName(activeAlerts.Title),
-            Cities = cities,
+            Cities = cities.ToList(),
             AlertDate = DateTime.Now
         };
 
-        return alerts;
+        return alert;
     }
 
-    public async Task<List<Alert>> GetAlertsHistory()
+    public async Task<List<AlertHistory>> GetAlertsHistory()
     {
         var alertsHistory = await _alertService.GetAlertsHistory();
 
-        var alerts = new List<Alert>();
-        foreach (var alert in alertsHistory)
-        {
-            alerts.Add(new Alert
+        var alerts = await Task.WhenAll(alertsHistory.Select(async alert =>
+            new AlertHistory
             {
                 Category = await _categoryService.GetCategoryByName(alert.Title),
-                Cities = [await _cityService.GetCityByName(alert.Data)],
-                AlertDate = alert.AlertDate,
-            });
-        }
+                City = await _cityService.GetCityByName(alert.Data),
+                AlertDate = alert.AlertDate
+            }
+        ));
 
-        return alerts;
+        return alerts.ToList();
     }
 }

@@ -2,12 +2,11 @@
 using HomeFrontCommandLibrary.Interfaces;
 using HomeFrontCommandLibrary.Models;
 using HomeFrontCommandLibrary.Models.Responses;
-using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 
 namespace HomeFrontCommandLibrary.Services;
 
-internal class CategoryService(IMemoryCache cache, Language language = Language.Hebrew) : ICategoryService
+internal class CategoryService(ICacheService cacheService, Language language = Language.Hebrew) : ICategoryService
 {
     private readonly HttpClient _httpClient = new();
 
@@ -46,14 +45,23 @@ internal class CategoryService(IMemoryCache cache, Language language = Language.
 
     private async Task<List<AlertTranslationApiResponse>> GetTranslations()
     {
-        return await cache.GetOrCreateAsync("translations", async entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
-            var response = await _httpClient.GetAsync("https://www.oref.org.il/alerts/alertsTranslation.json");
-            if (!response.IsSuccessStatusCode)
-                throw new HttpRequestException($"Failed to fetch translations: {response.ReasonPhrase}");
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<AlertTranslationApiResponse>>(content);
-        }) ?? throw new InvalidOperationException();
+        const string cacheKey = "translations";
+
+        var cached = await cacheService.GetCachedData(cacheKey);
+        if (cached is List<AlertTranslationApiResponse> translations)
+            return translations;
+
+        var response = await _httpClient.GetAsync("https://www.oref.org.il/alerts/alertsTranslation.json");
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException($"Failed to fetch translations: {response.ReasonPhrase}");
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<List<AlertTranslationApiResponse>>(content)
+                     ?? throw new InvalidOperationException("Failed to deserialize translations");
+
+        await cacheService.SetCachedData(cacheKey, result, TimeSpan.FromHours(1));
+
+        return result;
     }
+
 }

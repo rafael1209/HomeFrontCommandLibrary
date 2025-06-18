@@ -5,5 +5,5 @@ namespace HomeFrontCommandLibrary.Interfaces;
 public interface IHomeFrontCommand
 {
     Task<Alert> GetActiveAlert();
-    Task<List<Alert>> GetAlertsHistory();
+    Task<List<AlertHistory>> GetAlertsHistory();
 }

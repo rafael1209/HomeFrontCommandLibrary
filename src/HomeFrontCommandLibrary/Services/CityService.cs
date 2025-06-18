@@ -2,12 +2,11 @@
 using HomeFrontCommandLibrary.Interfaces;
 using HomeFrontCommandLibrary.Models;
 using HomeFrontCommandLibrary.Models.Responses;
-using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 
 namespace HomeFrontCommandLibrary.Services;
 
-internal class CityService(IMemoryCache memoryCache, Language language = Language.Hebrew) : ICityService
+internal class CityService(ICacheService cacheService, Language language = Language.Hebrew) : ICityService
 {
     private readonly HttpClient _httpClient = new();
 
@@ -35,13 +34,13 @@ internal class CityService(IMemoryCache memoryCache, Language language = Languag
             AreaName = city.AreaName,
             ProtectionTime = city.MigunTime
         };
-        
+
         return cityData;
     }
 
     public async Task<List<DistrictsApiResponse>> GetCities()
     {
-        var lang = language switch
+        var langCode = language switch
         {
             Language.Hebrew => "heb",
             Language.Russian => "rus",
@@ -50,14 +49,23 @@ internal class CityService(IMemoryCache memoryCache, Language language = Languag
             _ => "heb"
         };
 
-        return await memoryCache.GetOrCreateAsync("cities", async entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
-            var response = await _httpClient.GetAsync($"https://www.oref.org.il/districts/districts_{lang}.json");
-            if (!response.IsSuccessStatusCode)
-                throw new HttpRequestException($"Failed to fetch cities: {response.ReasonPhrase}");
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<DistrictsApiResponse>>(content);
-        }) ?? throw new InvalidOperationException();
+        var cacheKey = $"cities-{langCode}";
+
+        var cached = await cacheService.GetCachedData(cacheKey);
+        if (cached is List<DistrictsApiResponse> cities)
+            return cities;
+
+        var response = await _httpClient.GetAsync($"https://www.oref.org.il/districts/districts_{langCode}.json");
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException($"Failed to fetch cities: {response.ReasonPhrase}");
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<List<DistrictsApiResponse>>(content)
+                     ?? throw new InvalidOperationException();
+
+        await cacheService.SetCachedData(cacheKey, result, TimeSpan.FromHours(1));
+
+        return result;
     }
+
 }
