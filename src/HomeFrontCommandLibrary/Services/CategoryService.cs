@@ -15,8 +15,18 @@ internal class CategoryService(ICacheService cacheService, Language language = L
         var translations = await GetTranslations();
 
         var translation = translations.FirstOrDefault(t =>
-                              string.Equals(t.HebTitle, name, StringComparison.OrdinalIgnoreCase))
-                          ?? throw new Exception($"Translation not found for '{name}'");
+            string.Equals(t.HebTitle, name, StringComparison.OrdinalIgnoreCase));
+
+        if (translation == null)
+        {
+            return new Category
+            {
+                Id = 0,
+                MatrixId = 0,
+                Title = name,
+                Description = null
+            };
+        }
 
         var category = new Category
         {
