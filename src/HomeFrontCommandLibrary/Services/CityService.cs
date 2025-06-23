@@ -6,13 +6,13 @@ using Newtonsoft.Json;
 
 namespace HomeFrontCommandLibrary.Services;
 
-internal class CityService(ICacheService cacheService, Language language = Language.Hebrew) : ICityService
+internal class CityService(ICacheService cacheService) : ICityService
 {
     private readonly HttpClient _httpClient = new();
 
-    public async Task<City> GetCityByName(string cityName)
+    public async Task<City> GetCityByName(string cityName, Language language = Language.Hebrew)
     {
-        var cites = await GetCities();
+        var cites = await GetCities(language);
 
         var city = cites.FirstOrDefault(c => c.LabelHebrew.Equals(cityName, StringComparison.OrdinalIgnoreCase));
 
@@ -38,7 +38,7 @@ internal class CityService(ICacheService cacheService, Language language = Langu
         return cityData;
     }
 
-    public async Task<List<DistrictsApiResponse>> GetCities()
+    public async Task<List<DistrictsApiResponse>> GetCities(Language language = Language.Hebrew)
     {
         var langCode = language switch
         {

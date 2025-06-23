@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 
 namespace HomeFrontCommandLibrary.Services;
 
-internal class CategoryService(ICacheService cacheService, Language language = Language.Hebrew) : ICategoryService
+internal class CategoryService(ICacheService cacheService) : ICategoryService
 {
     private readonly HttpClient _httpClient = new();
 
-    public async Task<Category> GetCategoryByName(string name)
+    public async Task<Category> GetCategoryByName(string name, Language language = Language.Hebrew)
     {
         var translations = await GetTranslations();
 
