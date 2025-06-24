@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using HomeFrontCommandLibrary.Enums;
 using HomeFrontCommandLibrary.Interfaces;
 using HomeFrontCommandLibrary.Models;
@@ -49,6 +49,14 @@ public class Test
     public async Task TestGetCurrent()
     {
         var activeAlert = await HomeFrontCommand.GetActiveAlert();
+
+        Assert.NotNull(activeAlert);
+    }
+
+    [Fact]
+    public async Task TestActiveAlertExample()
+    {
+        var activeAlert = await HomeFrontCommand.GetActiveAlertExample("ניתן לצאת מהמרחב המוגן");
 
         Assert.NotNull(activeAlert);
     }

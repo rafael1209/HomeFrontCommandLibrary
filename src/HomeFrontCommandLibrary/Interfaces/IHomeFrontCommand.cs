@@ -9,4 +9,5 @@ public interface IHomeFrontCommand
     Task<List<AlertHistory>> GetAlertsHistory(Language language = Language.Hebrew);
     Task<City> GetCityByName(string name, Language language = Language.Hebrew);
     Task<Category> GetCategoryByName(string name, Language language = Language.Hebrew);
+    Task<Alert> GetActiveAlertExample(string categoryName, Language language = Language.Hebrew);
 }
