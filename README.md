@@ -1,11 +1,11 @@
 # HomeFrontCommandLibrary
 
-📡 **A C# library for retrieving alerts from Israel's Home Front Command (פיקוד העורף)**
+?? **A C# library for retrieving alerts from Israel's Home Front Command (????? ?????)**
 Provides access to **real-time rocket/siren alerts** and **alert history**, with multi-language support for city and category names.
 
 ---
 
-## 📦 Installation
+## ?? Installation
 
 Via NuGet:
 
@@ -17,17 +17,17 @@ Or clone this repository and reference the project directly.
 
 ---
 
-## ✅ Features
+## ? Features
 
 * Get the **current active alert**
 * Fetch **historical alert data**
-* **All responses include all languages** (Hebrew, Russian, English, Arabic) — no need to specify language
+* **All responses include all languages** (Hebrew, Russian, English, Arabic) � no need to specify language
 * Get all cached cities with `GetAllCities()`
 * In-memory **caching support** for optimal performance
 
 ---
 
-## 🚀 Quick Start
+## ?? Quick Start
 
 ```csharp
 using HomeFrontCommandLibrary;
@@ -70,13 +70,14 @@ class Program
 
 ---
 
-## 🧩 Models
+## ?? Models
 
 ### `Alert`
 
 ```csharp
 public class Alert
 {
+    public required string? Id { get; set; }
     public Category? Category { get; set; }
     public List<City>? Cities { get; set; }
     public DateTime AlertDate { get; set; }
@@ -107,18 +108,18 @@ public class Category
 
 public class CategoryTitle
 {
-    public string Hebrew { get; set; }
-    public string English { get; set; }
-    public string Russian { get; set; }
-    public string Arabic { get; set; }
+    public string Hebrew { get; set; } = string.Empty;
+    public string English { get; set; } = string.Empty;
+    public string Russian { get; set; } = string.Empty;
+    public string Arabic { get; set; } = string.Empty;
 }
 
 public class CategoryDescription
 {
-    public string Hebrew { get; set; }
-    public string English { get; set; }
-    public string Russian { get; set; }
-    public string Arabic { get; set; }
+    public string Hebrew { get; set; } = string.Empty;
+    public string English { get; set; } = string.Empty;
+    public string Russian { get; set; } = string.Empty;
+    public string Arabic { get; set; } = string.Empty;
 }
 ```
 
@@ -131,30 +132,30 @@ public class City
     public int AreaId { get; set; }
     public required CityName Name { get; set; }
     public required ReshutName Reshut { get; set; }
-    public string AreaName { get; set; }
+    public string AreaName { get; set; } = string.Empty;
     public int ProtectionTime { get; set; }
 }
 
 public class CityName
 {
-    public string Hebrew { get; set; }
-    public string English { get; set; }
-    public string Russian { get; set; }
-    public string Arabic { get; set; }
+    public string Hebrew { get; set; } = string.Empty;
+    public string English { get; set; } = string.Empty;
+    public string Russian { get; set; } = string.Empty;
+    public string Arabic { get; set; } = string.Empty;
 }
 
 public class ReshutName
 {
-    public string Hebrew { get; set; }
-    public string English { get; set; }
-    public string Russian { get; set; }
-    public string Arabic { get; set; }
+    public string Hebrew { get; set; } = string.Empty;
+    public string English { get; set; } = string.Empty;
+    public string Russian { get; set; } = string.Empty;
+    public string Arabic { get; set; } = string.Empty;
 }
 ```
 
 ---
 
-## 🌐 Multi-Language Support
+## ?? Multi-Language Support
 
 All responses automatically include translations in all supported languages:
 
@@ -167,23 +168,23 @@ All responses automatically include translations in all supported languages:
 
 **Example:**
 ```csharp
-var city = await command.GetCityByName("תל אביב");
-Console.WriteLine(city.Name.Hebrew);   // תל אביב
+var city = await command.GetCityByName("?? ????");
+Console.WriteLine(city.Name.Hebrew);   // ?? ????
 Console.WriteLine(city.Name.English);  // Tel Aviv
-Console.WriteLine(city.Name.Russian);  // Тель-Авив
-Console.WriteLine(city.Name.Arabic);   // تل أبيب
+Console.WriteLine(city.Name.Russian);  // ????-????
+Console.WriteLine(city.Name.Arabic);   // ?? ????
 ```
 
 ---
 
-## 🧠 Dependencies
+## ?? Dependencies
 
-* [`Newtonsoft.Json`](https://www.nuget.org/packages/Newtonsoft.Json) – for JSON serialization
-* [`Microsoft.Extensions.Caching.Memory`](https://www.nuget.org/packages/Microsoft.Extensions.Caching.Memory) – in-memory caching
+* [`Newtonsoft.Json`](https://www.nuget.org/packages/Newtonsoft.Json) � for JSON serialization
+* [`Microsoft.Extensions.Caching.Memory`](https://www.nuget.org/packages/Microsoft.Extensions.Caching.Memory) � in-memory caching
 
 ---
 
-## 🛠 Roadmap
+## ?? Roadmap
 
 * [ ] Dependency Injection support
 * [ ] Unit test coverage
@@ -192,6 +193,6 @@ Console.WriteLine(city.Name.Arabic);   // تل أبيب
 
 ---
 
-## 📄 License
+## ?? License
 
-MIT © Rafael Chasman
+MIT � Rafael Chasman
