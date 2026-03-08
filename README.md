@@ -1,7 +1,7 @@
 # HomeFrontCommandLibrary
 
 📡 **A C# library for retrieving alerts from Israel's Home Front Command (פיקוד העורף)**
-Provides access to **real-time rocket/siren alerts** and **alert history**, with multi-language support and city names.
+Provides access to **real-time rocket/siren alerts** and **alert history**, with multi-language support for city and category names.
 
 ---
 
@@ -21,8 +21,8 @@ Or clone this repository and reference the project directly.
 
 * Get the **current active alert**
 * Fetch **historical alert data**
-* Automatically translated alert categories and cities names (Hebrew, Russian, English, Arabic)
-* Resolve city names by alert
+* **All responses include all languages** (Hebrew, Russian, English, Arabic) — no need to specify language
+* Get all cached cities with `GetAllCities()`
 * In-memory **caching support** for optimal performance
 
 ---
@@ -31,22 +31,39 @@ Or clone this repository and reference the project directly.
 
 ```csharp
 using HomeFrontCommandLibrary;
-using HomeFrontCommandLibrary.Enums;
 
 class Program
 {
     static async Task Main()
     {
-        var command = new HomeFrontCommand(Language.Russian);
+        var command = new HomeFrontCommand();
 
+        // Get current active alert
         var activeAlert = await command.GetActiveAlert();
-        Console.WriteLine($"Alert category: {activeAlert.Category.Title}");
-        Console.WriteLine("Cities:");
-        foreach (var city in activeAlert.Cities)
-            Console.WriteLine($" - {city.Name}");
+        if (activeAlert.Category != null)
+        {
+            // Access category in any language
+            Console.WriteLine($"Alert (Hebrew): {activeAlert.Category.Title.Hebrew}");
+            Console.WriteLine($"Alert (Russian): {activeAlert.Category.Title.Russian}");
+            Console.WriteLine($"Alert (English): {activeAlert.Category.Title.English}");
 
+            // Access cities in any language
+            foreach (var city in activeAlert.Cities!)
+            {
+                Console.WriteLine($" - {city.Name.Hebrew} / {city.Name.English}");
+            }
+        }
+
+        // Get alert history
         var history = await command.GetAlertsHistory();
-        Console.WriteLine($"Last alert was on: {history.First().AlertDate}");
+        foreach (var alert in history.Take(5))
+        {
+            Console.WriteLine($"{alert.AlertDate}: {alert.City.Name.Hebrew} - {alert.Category.Title.Russian}");
+        }
+
+        // Get all cached cities
+        var allCities = command.GetAllCities();
+        Console.WriteLine($"Total cities: {allCities.Count}");
     }
 }
 ```
@@ -60,8 +77,8 @@ class Program
 ```csharp
 public class Alert
 {
-    public Category Category { get; set; }
-    public List<City> Cities { get; set; }
+    public Category? Category { get; set; }
+    public List<City>? Cities { get; set; }
     public DateTime AlertDate { get; set; }
 }
 ```
@@ -71,8 +88,8 @@ public class Alert
 ```csharp
 public class AlertHistory
 {
-    public Category Category { get; set; }
-    public City City { get; set; }
+    public required Category Category { get; set; }
+    public required City City { get; set; }
     public DateTime AlertDate { get; set; }
 }
 ```
@@ -84,8 +101,24 @@ public class Category
 {
     public int Id { get; set; }
     public int MatrixId { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
+    public required CategoryTitle Title { get; set; }
+    public required CategoryDescription Description { get; set; }
+}
+
+public class CategoryTitle
+{
+    public string Hebrew { get; set; }
+    public string English { get; set; }
+    public string Russian { get; set; }
+    public string Arabic { get; set; }
+}
+
+public class CategoryDescription
+{
+    public string Hebrew { get; set; }
+    public string English { get; set; }
+    public string Russian { get; set; }
+    public string Arabic { get; set; }
 }
 ```
 
@@ -94,23 +127,52 @@ public class Category
 ```csharp
 public class City
 {
+    public int Id { get; set; }
     public int AreaId { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string AreaName { get; set; } = string.Empty;
+    public required CityName Name { get; set; }
+    public required ReshutName Reshut { get; set; }
+    public string AreaName { get; set; }
     public int ProtectionTime { get; set; }
+}
+
+public class CityName
+{
+    public string Hebrew { get; set; }
+    public string English { get; set; }
+    public string Russian { get; set; }
+    public string Arabic { get; set; }
+}
+
+public class ReshutName
+{
+    public string Hebrew { get; set; }
+    public string English { get; set; }
+    public string Russian { get; set; }
+    public string Arabic { get; set; }
 }
 ```
 
 ---
 
-## 🌐 Supported Languages
+## 🌐 Multi-Language Support
 
-| Language | Enum Value         |
-| -------- | ------------------ |
-| Hebrew   | `Language.Hebrew`  |
-| Russian  | `Language.Russian` |
-| English  | `Language.English` |
-| Arabic   | `Language.Arabic`  |
+All responses automatically include translations in all supported languages:
+
+| Language | Property Access        |
+| -------- | ---------------------- |
+| Hebrew   | `.Hebrew`              |
+| Russian  | `.Russian`             |
+| English  | `.English`             |
+| Arabic   | `.Arabic`              |
+
+**Example:**
+```csharp
+var city = await command.GetCityByName("תל אביב");
+Console.WriteLine(city.Name.Hebrew);   // תל אביב
+Console.WriteLine(city.Name.English);  // Tel Aviv
+Console.WriteLine(city.Name.Russian);  // Тель-Авив
+Console.WriteLine(city.Name.Arabic);   // تل أبيب
+```
 
 ---
 
