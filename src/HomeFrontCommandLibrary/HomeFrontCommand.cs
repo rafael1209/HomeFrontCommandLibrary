@@ -1093,6 +1093,7 @@ public class HomeFrontCommand : IHomeFrontCommand
 
         var alert = new Alert
         {
+            Id = "124FC5752F86660B7458D50DCE51AE40",
             Category = category,
             Cities = cities,
             AlertDate = DateTime.Now
