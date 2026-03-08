@@ -1,5 +1,4 @@
-﻿using HomeFrontCommandLibrary.Enums;
-using HomeFrontCommandLibrary.Interfaces;
+﻿using HomeFrontCommandLibrary.Interfaces;
 using HomeFrontCommandLibrary.Models;
 using HomeFrontCommandLibrary.Models.Responses;
 using Newtonsoft.Json;
@@ -10,7 +9,7 @@ internal class CategoryService(ICacheService cacheService) : ICategoryService
 {
     private readonly HttpClient _httpClient = new();
 
-    public async Task<Category> GetCategoryByName(string name, Language language = Language.Hebrew)
+    public async Task<Category> GetCategoryByName(string name)
     {
         var translations = await GetTranslations();
 
@@ -23,8 +22,8 @@ internal class CategoryService(ICacheService cacheService) : ICategoryService
             {
                 Id = 0,
                 MatrixId = 0,
-                Title = name,
-                Description = null
+                Title = new CategoryTitle { Hebrew = name },
+                Description = new CategoryDescription()
             };
         }
 
@@ -32,21 +31,19 @@ internal class CategoryService(ICacheService cacheService) : ICategoryService
         {
             Id = translation.CatId,
             MatrixId = translation.MatrixCatId,
-            Title = language switch
+            Title = new CategoryTitle
             {
-                Language.Hebrew => translation.HebTitle,
-                Language.Russian => translation.RusTitle,
-                Language.Arabic => translation.ArbTitle,
-                Language.English => translation.EngTitle,
-                _ => translation.HebTitle
+                Hebrew = translation.HebTitle,
+                Russian = translation.RusTitle,
+                Arabic = translation.ArbTitle,
+                English = translation.EngTitle
             },
-            Description = language switch
+            Description = new CategoryDescription
             {
-                Language.Hebrew => translation.Heb,
-                Language.Russian => translation.Rus,
-                Language.Arabic => translation.Arb,
-                Language.English => translation.Eng,
-                _ => translation.Heb
+                Hebrew = translation.Heb,
+                Russian = translation.Rus,
+                Arabic = translation.Arb,
+                English = translation.Eng
             }
         };
 

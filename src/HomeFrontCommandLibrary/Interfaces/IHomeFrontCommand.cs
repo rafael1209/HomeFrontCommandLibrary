@@ -1,13 +1,13 @@
-﻿using HomeFrontCommandLibrary.Enums;
-using HomeFrontCommandLibrary.Models;
+﻿using HomeFrontCommandLibrary.Models;
 
 namespace HomeFrontCommandLibrary.Interfaces;
 
 public interface IHomeFrontCommand
 {
-    Task<Alert> GetActiveAlert(Language language = Language.Hebrew);
-    Task<List<AlertHistory>> GetAlertsHistory(Language language = Language.Hebrew);
-    Task<City> GetCityByName(string name, Language language = Language.Hebrew);
-    Task<Category> GetCategoryByName(string name, Language language = Language.Hebrew);
-    Task<Alert> GetActiveAlertExample(string categoryName, Language language = Language.Hebrew);
+    Task<Alert> GetActiveAlert();
+    Task<List<AlertHistory>> GetAlertsHistory();
+    Task<City> GetCityByName(string name);
+    Task<Category> GetCategoryByName(string name);
+    Task<Alert> GetActiveAlertExample(string categoryName);
+    List<City> GetAllCities();
 }

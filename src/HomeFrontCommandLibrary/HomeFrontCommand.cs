@@ -1,5 +1,4 @@
-﻿using HomeFrontCommandLibrary.Enums;
-using HomeFrontCommandLibrary.Interfaces;
+﻿using HomeFrontCommandLibrary.Interfaces;
 using HomeFrontCommandLibrary.Models;
 using HomeFrontCommandLibrary.Services;
 
@@ -12,7 +11,7 @@ public class HomeFrontCommand : IHomeFrontCommand
     private readonly ICategoryService _categoryService = new CategoryService(MemoryCache);
     private readonly ICityService _cityService = new CityService(MemoryCache);
 
-    public async Task<Alert> GetActiveAlert(Language language = Language.Hebrew)
+    public async Task<Alert> GetActiveAlert()
     {
         var activeAlerts = await _alertService.GetCurrentAlert();
 
@@ -20,6 +19,7 @@ public class HomeFrontCommand : IHomeFrontCommand
         {
             return new Alert
             {
+                Id = null,
                 Category = null,
                 Cities = null,
                 AlertDate = DateTime.Now,
@@ -27,28 +27,29 @@ public class HomeFrontCommand : IHomeFrontCommand
         }
 
         var cities = await Task.WhenAll(
-            activeAlerts.Data.Select(name => _cityService.GetCityByName(name, language))
+            activeAlerts.Data.Select(name => _cityService.GetCityByName(name))
         );
 
         var alert = new Alert
         {
-            Category = await _categoryService.GetCategoryByName(activeAlerts.Title, language),
+            Id = activeAlerts.Id,
+            Category = await _categoryService.GetCategoryByName(activeAlerts.Title),
             Cities = cities.ToList(),
-            AlertDate = DateTime.Now
+            AlertDate = DateTime.Now,
         };
 
         return alert;
     }
 
-    public async Task<List<AlertHistory>> GetAlertsHistory(Language language = Language.Hebrew)
+    public async Task<List<AlertHistory>> GetAlertsHistory()
     {
         var alertsHistory = await _alertService.GetAlertsHistory();
 
         var alerts = await Task.WhenAll(alertsHistory.Select(async alert =>
             new AlertHistory
             {
-                Category = await _categoryService.GetCategoryByName(alert.Title, language),
-                City = await _cityService.GetCityByName(alert.Data, language),
+                Category = await _categoryService.GetCategoryByName(alert.Title),
+                City = await _cityService.GetCityByName(alert.Data),
                 AlertDate = alert.AlertDate
             }
         ));
@@ -56,23 +57,28 @@ public class HomeFrontCommand : IHomeFrontCommand
         return alerts.ToList();
     }
 
-    public async Task<City> GetCityByName(string name, Language language = Language.Hebrew)
+    public async Task<City> GetCityByName(string name)
     {
-        var city = await _cityService.GetCityByName(name, language);
+        var city = await _cityService.GetCityByName(name);
 
         return city;
     }
 
-    public async Task<Category> GetCategoryByName(string name, Language language = Language.Hebrew)
+    public async Task<Category> GetCategoryByName(string name)
     {
-        var category = await _categoryService.GetCategoryByName(name, language);
+        var category = await _categoryService.GetCategoryByName(name);
 
         return category;
     }
 
-    public async Task<Alert> GetActiveAlertExample(string categoryName, Language language = Language.Hebrew)
+    public List<City> GetAllCities()
     {
-        var category = await _categoryService.GetCategoryByName(categoryName, language);
+        return _cityService.GetAllCities();
+    }
+
+    public async Task<Alert> GetActiveAlertExample(string categoryName)
+    {
+        var category = await _categoryService.GetCategoryByName(categoryName);
 
         var allCities = new List<string>
         {
@@ -1083,7 +1089,7 @@ public class HomeFrontCommand : IHomeFrontCommand
 
         var cities = new List<City>();
         foreach (var city in selectedCities)
-            cities.Add(await GetCityByName(city, language));
+            cities.Add(await GetCityByName(city));
 
         var alert = new Alert
         {

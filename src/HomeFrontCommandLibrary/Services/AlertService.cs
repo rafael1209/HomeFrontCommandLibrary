@@ -7,10 +7,11 @@ namespace HomeFrontCommandLibrary.Services;
 internal class AlertService : IAlertService
 {
     private readonly HttpClient _httpClient = new();
+    public readonly string BaseUrl = "https://www.oref.org.il/warningMessages/alert";
 
     public async Task<CurrentAlertApiResponse?> GetCurrentAlert()
     {
-        var response = await _httpClient.GetAsync("https://www.oref.org.il/warningMessages/alert/Alerts.json");
+        var response = await _httpClient.GetAsync(BaseUrl + "/Alerts.json");
 
         if (!response.IsSuccessStatusCode)
             throw new HttpRequestException($"Failed to fetch current alert: {response.ReasonPhrase}");
@@ -24,7 +25,7 @@ internal class AlertService : IAlertService
 
     public async Task<List<AlertHistoryApiResponse>> GetAlertsHistory()
     {
-        var response = await _httpClient.GetAsync("https://www.oref.org.il/warningMessages/alert/History/AlertsHistory.json");
+        var response = await _httpClient.GetAsync(BaseUrl + "/History/AlertsHistory.json");
 
         if (!response.IsSuccessStatusCode)
             throw new HttpRequestException($"Failed to fetch alerts history: {response.ReasonPhrase}");

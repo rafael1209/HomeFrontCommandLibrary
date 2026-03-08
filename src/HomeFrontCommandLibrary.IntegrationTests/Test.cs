@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
-using HomeFrontCommandLibrary.Enums;
 using HomeFrontCommandLibrary.Interfaces;
-using HomeFrontCommandLibrary.Models;
 
 namespace HomeFrontCommandLibrary.IntegrationTests;
 
@@ -14,35 +12,22 @@ public class Test
     {
         var watch = new Stopwatch();
 
-        var alertsHistory = await HomeFrontCommand.GetAlertsHistory(Language.Hebrew);
+        var alertsHistory = await HomeFrontCommand.GetAlertsHistory();
 
-        var alertsInRussian = new List<AlertHistory>();
-        foreach (var alert in alertsHistory)
+        Assert.NotNull(alertsHistory);
+        Assert.All(alertsHistory, alert =>
         {
-            alertsInRussian.Add(new AlertHistory()
-            {
-                AlertDate = alert.AlertDate,
-                Category = await HomeFrontCommand.GetCategoryByName(alert.Category.Title, Language.Russian),
-                City = await HomeFrontCommand.GetCityByName(alert.City.Name, Language.Russian)
-            });
-        }
+            Assert.NotNull(alert.Category);
+            Assert.NotNull(alert.City);
+            Assert.NotEmpty(alert.Category.Title.Hebrew);
+            Assert.NotEmpty(alert.City.Name.Hebrew);
+        });
 
         watch.Start();
-        alertsHistory = await HomeFrontCommand.GetAlertsHistory(Language.Hebrew);
-
-        alertsInRussian = new List<AlertHistory>();
-        foreach (var alert in alertsHistory)
-        {
-            alertsInRussian.Add(new AlertHistory()
-            {
-                AlertDate = alert.AlertDate,
-                Category = await HomeFrontCommand.GetCategoryByName(alert.Category.Title, Language.Russian),
-                City = await HomeFrontCommand.GetCityByName(alert.City.Name, Language.Russian)
-            });
-        }
+        alertsHistory = await HomeFrontCommand.GetAlertsHistory();
         watch.Stop();
 
-        Assert.NotNull(alertsInRussian);
+        Assert.NotNull(alertsHistory);
     }
 
     [Fact]
@@ -59,5 +44,18 @@ public class Test
         var activeAlert = await HomeFrontCommand.GetActiveAlertExample("ניתן לצאת מהמרחב המוגן");
 
         Assert.NotNull(activeAlert);
+        Assert.NotNull(activeAlert.Category);
+        Assert.NotEmpty(activeAlert.Category.Title.Hebrew);
+        Assert.NotEmpty(activeAlert.Category.Title.Russian);
+        Assert.NotEmpty(activeAlert.Category.Title.English);
+        Assert.NotEmpty(activeAlert.Category.Title.Arabic);
+    }
+
+    [Fact]
+    public void TestGetAllCities()
+    {
+        var cities = HomeFrontCommand.GetAllCities();
+
+        Assert.NotNull(cities);
     }
 }

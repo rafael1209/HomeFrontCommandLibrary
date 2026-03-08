@@ -2,7 +2,7 @@
 
 public class AlertHistory
 {
-    public Category Category { get; set; } = new();
-    public City City { get; set; } = new();
+    public required Category Category { get; set; }
+    public required City City { get; set; }
     public DateTime AlertDate { get; set; }
 }
